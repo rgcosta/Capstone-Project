@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 mTextView.setText("Welcome, " + user.getDisplayName());
-                // ...
+                Intent intent = new Intent(this, ProductsActivity.class);
+                startActivity(intent);
 
             } else {
                 // Sign in failed. If response is null the user canceled the
