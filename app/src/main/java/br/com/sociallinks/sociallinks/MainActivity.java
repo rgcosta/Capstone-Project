@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private TextView mTextView;
+    private FirebaseAuth mAuth;
 
 
     @Override
@@ -39,8 +40,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextView = findViewById(R.id.textView);
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth.getCurrentUser() != null) {
+            // already signed in
+            Intent intent = new Intent(this, ProductsActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            // not signed in
+            loginFlow();
+        }
 
+        printKeyHash();
+    }
+
+    private void loginFlow() {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -53,12 +67,10 @@ public class MainActivity extends AppCompatActivity {
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setAvailableProviders(providers)
-                            .setIsSmartLockEnabled(false)
+                            .setLogo(R.drawable.ic_logo_link_512)
                             .build(),
                     RC_SIGN_IN);
         }
-
-        printKeyHash();
     }
 
     @Override
@@ -70,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                mTextView.setText("Welcome, " + user.getDisplayName());
+                //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 Intent intent = new Intent(this, ProductsActivity.class);
                 startActivity(intent);
+                finish();
 
             } else {
                 // Sign in failed. If response is null the user canceled the
@@ -83,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 if (response == null) {
                     // User pressed back button
                     Log.e(LOG_TAG, "User pressed back button!!");
+                    finish();
                     return;
                 }
 
@@ -94,16 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(LOG_TAG, "Sign-in error: ", response.getError());
             }
         }
-    }
-
-    public void logOut(View view) {
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // ...
-                    }
-                });
     }
 
     //Facebook login issue

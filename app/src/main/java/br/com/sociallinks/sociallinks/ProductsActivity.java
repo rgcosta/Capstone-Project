@@ -1,9 +1,12 @@
 package br.com.sociallinks.sociallinks;
 
+import android.content.Intent;
+
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
+import android.support.annotation.NonNull;
+
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,25 +15,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.PixelCopy;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
+
+import br.com.sociallinks.sociallinks.utils.RoundedTransformation;
 
 public class ProductsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String LOG_TAG = ProductsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -40,6 +49,31 @@ public class ProductsActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setUserProfileMenu(navigationView);
+    }
+
+    private void setUserProfileMenu(NavigationView navigationView) {
+        ImageView userImageView = navigationView.getHeaderView(0).findViewById(R.id.iv_user_pic);
+        TextView userNameTextView = navigationView.getHeaderView(0).findViewById(R.id.tv_user_name);
+        TextView userEmailTextView = navigationView.getHeaderView(0).findViewById(R.id.tv_user_email);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            userNameTextView.setText(user.getDisplayName());
+            userEmailTextView.setText(user.getEmail());
+
+            if (user.getPhotoUrl() != null) {
+                Picasso.get()
+                        .load(user.getPhotoUrl())
+                        .transform(new RoundedTransformation(100,0))
+                        .into(userImageView);
+                Log.e(LOG_TAG, "url not null");
+            } else {
+                Picasso.get().load(R.drawable.image_default_profile).into(userImageView);
+                Log.e(LOG_TAG, "url null");
+            }
+        }
     }
 
     @Override
@@ -80,18 +114,46 @@ public class ProductsActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_products) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            ProductsFragment productsFragment = new ProductsFragment();
 
-        } else if (id == R.id.nav_slideshow) {
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, productsFragment)
+                    .commit();
+        } else if (id == R.id.nav_links) {
 
-        } else if (id == R.id.nav_manage) {
+            LinksFragment linksFragment = new LinksFragment();
 
-        } else if (id == R.id.nav_share) {
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, linksFragment)
+                    .commit();
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_favorites) {
+            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+            startActivity(intent);
 
+        } else if (id == R.id.nav_settings) {
+
+        } else if (id == R.id.nav_account) {
+
+        } else if (id == R.id.nav_logout) {
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+                    });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
