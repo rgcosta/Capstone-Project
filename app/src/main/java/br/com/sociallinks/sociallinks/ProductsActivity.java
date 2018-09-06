@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,18 +14,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.PixelCopy;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
 
-import br.com.sociallinks.sociallinks.utils.RoundedTransformation;
+import br.com.sociallinks.sociallinks.fragments.LinksFragment;
+import br.com.sociallinks.sociallinks.fragments.ProductsFragment;
 
 public class ProductsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -64,14 +64,14 @@ public class ProductsActivity extends AppCompatActivity
             userEmailTextView.setText(user.getEmail());
 
             if (user.getPhotoUrl() != null) {
-                Picasso.get()
+                Glide.with(this)
                         .load(user.getPhotoUrl())
-                        .transform(new RoundedTransformation(100,0))
+                        .apply(new RequestOptions().circleCrop())
                         .into(userImageView);
-                Log.e(LOG_TAG, "url not null");
             } else {
-                Picasso.get().load(R.drawable.image_default_profile).into(userImageView);
-                Log.e(LOG_TAG, "url null");
+                Glide.with(this)
+                        .load(R.drawable.image_default_profile)
+                        .into(userImageView);
             }
         }
     }

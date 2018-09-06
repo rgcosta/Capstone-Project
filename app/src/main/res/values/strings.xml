@@ -14,7 +14,6 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello products fragment</string>
     <string name="nav_menu_products">Products</string>
     <string name="nav_menu_links">Links</string>
     <string name="nav_menu_favorites">Favorites</string>
@@ -22,4 +21,8 @@
     <string name="nav_menu_account">Account</string>
     <string name="nav_menu_logout">Log Out</string>
     <string name="communicate">Communicate</string>
+    <string name="contDescription_product_image">Imagem ilustrativa do produto</string>
+    <string name="contDescription_price_icon">Icone do preço do produto</string>
+    <string name="currency">R$</string>
+    <string name="commission_porcentage_label">%</string>
 </resources>
