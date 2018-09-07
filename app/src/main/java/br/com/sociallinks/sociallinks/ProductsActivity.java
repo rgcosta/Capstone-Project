@@ -3,6 +3,7 @@ package br.com.sociallinks.sociallinks;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 
 import android.support.v4.app.FragmentManager;
@@ -25,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import br.com.sociallinks.sociallinks.adapters.ProductsAdapter;
 import br.com.sociallinks.sociallinks.fragments.LinksFragment;
 import br.com.sociallinks.sociallinks.fragments.ProductsFragment;
 
@@ -32,6 +34,8 @@ public class ProductsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = ProductsActivity.class.getSimpleName();
+
+    private ProductsFragment mProductsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,12 +120,12 @@ public class ProductsActivity extends AppCompatActivity
 
         if (id == R.id.nav_products) {
             // Handle the camera action
-            ProductsFragment productsFragment = new ProductsFragment();
+            mProductsFragment = new ProductsFragment();
 
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, productsFragment)
+                    .replace(R.id.content_frame, mProductsFragment)
                     .commit();
         } else if (id == R.id.nav_links) {
 
@@ -160,4 +164,7 @@ public class ProductsActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
 }

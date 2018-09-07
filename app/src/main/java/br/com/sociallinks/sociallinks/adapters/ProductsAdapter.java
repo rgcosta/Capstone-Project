@@ -27,11 +27,18 @@ import java.util.List;
 import br.com.sociallinks.sociallinks.R;
 import br.com.sociallinks.sociallinks.models.Product;
 
-public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>{
+public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ProductViewHolder> {
 
     List<Product> mProducts = new ArrayList<>();
 
-    public ProductsAdapter(){
+    ProductsOnClickHandler mClickHandler;
+
+    public interface ProductsOnClickHandler {
+        void onClick(Product product);
+    }
+
+    public ProductsAdapter(ProductsOnClickHandler onClickHandler){
+        this.mClickHandler = onClickHandler;
     }
 
     @NonNull
@@ -89,7 +96,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
         notifyDataSetChanged();
     }
 
-    public class ProductViewHolder extends RecyclerView.ViewHolder {
+    public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView mProductImageView;
         TextView mProductNameTextView;
@@ -102,6 +109,14 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
             this.mProductNameTextView = itemView.findViewById(R.id.tv_product_title);
             this.mProductPrice = itemView.findViewById(R.id.tv_product_price);
             this.mProductCommission = itemView.findViewById(R.id.tv_product_commission);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            Product productClicked = mProducts.get(position);
+            mClickHandler.onClick(productClicked);
         }
     }
 }

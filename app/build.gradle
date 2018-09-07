@@ -9,8 +9,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "appToken", "\"1536024021537a78ab29e\"") //Move into debug and release build later
-        buildConfigField("String", "sourceId", "\"35988666\"")
     }
     buildTypes {
         release {
@@ -46,10 +44,13 @@ dependencies {
     //Palette
     implementation 'com.android.support:palette-v7:27.1.1'
 
-
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-jackson:2.3.0'
+
+    //Butter Knife
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
 
 }

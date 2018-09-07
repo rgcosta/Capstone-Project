@@ -1,5 +1,6 @@
 package br.com.sociallinks.sociallinks.fragments;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -11,10 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.sociallinks.sociallinks.ProductDetailActivity;
 import br.com.sociallinks.sociallinks.R;
 import br.com.sociallinks.sociallinks.adapters.ProductsAdapter;
 import br.com.sociallinks.sociallinks.models.Product;
@@ -23,10 +26,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductsFragment extends Fragment {
+public class ProductsFragment extends Fragment implements ProductsAdapter.ProductsOnClickHandler {
 
     private static final String LOG_TAG = ProductsFragment.class.getSimpleName();
     private static final String LIST_PRODUCTS_KEY = "list_products_key";
+    public static final String INTENT_PRODUCT_FLAG = "intent_product_flag";
 
     private ProductsAdapter mProductsAdapter;
     private List<Product> mProducts = new ArrayList<>();
@@ -71,7 +75,7 @@ public class ProductsFragment extends Fragment {
         productsRecyclerView.setLayoutManager(layoutManager);
         productsRecyclerView.setHasFixedSize(true);
 
-        mProductsAdapter = new ProductsAdapter();
+        mProductsAdapter = new ProductsAdapter(this);
         productsRecyclerView.setAdapter(mProductsAdapter);
     }
 
@@ -127,6 +131,13 @@ public class ProductsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(Product product) {
+        Intent intent = new Intent(getContext(), ProductDetailActivity.class);
+        intent.putExtra(INTENT_PRODUCT_FLAG, product);
+        startActivity(intent);
     }
 
     /**
