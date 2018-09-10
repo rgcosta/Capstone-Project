@@ -28,11 +28,21 @@
         </activity>
         <activity
             android:name=".ProductDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".ProductsActivity">
+            android:parentActivityName=".ProductsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ProductsActivity" />
+        </activity>
+        <activity
+            android:name=".ProductSharedActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="www.placenpepper.com" android:scheme="http"/>
+                <data android:host="www.placenpepper.com" android:scheme="https"/>
+            </intent-filter>
         </activity>
     </application>
 
