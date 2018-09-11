@@ -1,5 +1,8 @@
 package br.com.sociallinks.sociallinks;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,6 +20,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +35,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.util.concurrent.Executor;
 
@@ -43,6 +50,10 @@ import static br.com.sociallinks.sociallinks.fragments.ProductsFragment.INTENT_P
 public class ProductDetailActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = ProductDetailActivity.class.getSimpleName();
+    private static final String BASE_URL = "https://www.sociallinks.com";
+    private static final String PATH_URL = "product";
+    private static final String QUERY_KEY = "id";
+    private static final String DYNAMIC_LINK_DOMAIN = "sociallinks.page.link";
 
     @BindView(R.id.tv_product_price_detailScreen) TextView mProductPrice;
     @BindView(R.id.tv_product_commission_detailScreen) TextView mProductCommission;
@@ -51,9 +62,11 @@ public class ProductDetailActivity extends AppCompatActivity {
     @BindView(R.id.meta_bar) LinearLayout mMetaBar;
     @BindView(R.id.toolbar_detailed) Toolbar mToolbar;
     @BindView(R.id.collapsingToolbar_layout) CollapsingToolbarLayout mCollapsingToolbar;
-    @BindView(R.id.fab_share) FloatingActionButton mFabShare;
+    @BindView(R.id.fab_share) SpeedDialView mFabShare;
+    @BindView(R.id.progressBar) ProgressBar mLoadingIndicator;
 
     private Product mProduct;
+    private Uri mShortDynamicLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +80,92 @@ public class ProductDetailActivity extends AppCompatActivity {
             mProduct = intent.getParcelableExtra(INTENT_PRODUCT_FLAG);
         }
 
+        populateScreen();
+
+        addFabSubItem();
+
+        mFabShare.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
+            @Override
+            public boolean onActionSelected(SpeedDialActionItem actionItem) {
+                int fabSelected = actionItem.getId();
+                switch (fabSelected){
+                    case R.id.fab_link:
+                        mLoadingIndicator.setVisibility(View.VISIBLE);
+                        Task<ShortDynamicLink> shortDynamicLinkTask = createDynamicLink();
+
+                        shortDynamicLinkTask.addOnCompleteListener(new OnCompleteListener<ShortDynamicLink>() {
+                            @Override
+                            public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                                mLoadingIndicator.setVisibility(View.INVISIBLE);
+
+                                if (task.isSuccessful()){
+                                    mShortDynamicLink = task.getResult().getShortLink();
+                                    Log.e(LOG_TAG, mShortDynamicLink.toString());
+
+                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newRawUri("shortLink", mShortDynamicLink);
+                                    clipboard.setPrimaryClip(clip);
+                                    Toast.makeText(ProductDetailActivity.this, "Link copied to your clipboard.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Log.e(LOG_TAG, "Fail to generate new dynamic link: " +
+                                        task.getException());
+                                }
+                            }
+                        });
+                        return false;
+                    case R.id.fab_facebook:
+                        Toast.makeText(ProductDetailActivity.this, "Facebook", Toast.LENGTH_SHORT).show();
+                        return false;
+                    case R.id.fab_instagram:
+                        Toast.makeText(ProductDetailActivity.this, "Instagram", Toast.LENGTH_SHORT).show();
+                        return false;
+                    case R.id.fab_twitter:
+                        Toast.makeText(ProductDetailActivity.this, "Twitter", Toast.LENGTH_SHORT).show();
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+        });
+    }
+
+    private Task<ShortDynamicLink> createDynamicLink() {
+        Uri fullLinkUri = Uri.withAppendedPath(Uri.parse(BASE_URL), PATH_URL).buildUpon()
+                .appendQueryParameter(QUERY_KEY, String.valueOf(mProduct.getId())).build();
+
+        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(fullLinkUri)
+                .setDynamicLinkDomain(DYNAMIC_LINK_DOMAIN)
+                .setAndroidParameters(
+                        new DynamicLink.AndroidParameters.Builder()
+                                .build())
+                .setIosParameters(
+                        //for test purposes
+                        new DynamicLink.IosParameters.Builder("com.sociallinks.ios")
+                                .setAppStoreId("123456789")
+                                .build())
+                .setGoogleAnalyticsParameters(
+                        new DynamicLink.GoogleAnalyticsParameters.Builder()
+                                .setSource("app")
+                                .setMedium("social")
+                                .setCampaign("example-promo")
+                                .build())
+                .setSocialMetaTagParameters(
+                        new DynamicLink.SocialMetaTagParameters.Builder()
+                                .setTitle(mProduct.getName())
+                                .setDescription(mProduct.getDescription())
+                                .setImageUrl(Uri.parse(mProduct.getPhotoUrl()))
+                                .build())
+                .buildDynamicLink();
+
+        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLongLink(dynamicLink.getUri())
+                .buildShortDynamicLink(ShortDynamicLink.Suffix.SHORT);
+
+        return shortLinkTask;
+    }
+
+    private void populateScreen() {
         mToolbar.setNavigationIcon(R.drawable.ic_toolbar_back_white_24);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,59 +196,29 @@ public class ProductDetailActivity extends AppCompatActivity {
                     })
                     .into(mProductImage);
         }
-        mFabShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    }
 
-            }
-        });
-
-        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLink(Uri.parse("https://www.placenpepper.com/"))
-                .setDynamicLinkDomain("sociallinks.page.link")
-                .setAndroidParameters(
-                        new DynamicLink.AndroidParameters.Builder()
-                                .build())
-                .setIosParameters(
-                        new DynamicLink.IosParameters.Builder("com.example.ios")
-                                .setAppStoreId("123456789")
-                                .setMinimumVersion("1.0.1")
-                                .build())
-                .setGoogleAnalyticsParameters(
-                        new DynamicLink.GoogleAnalyticsParameters.Builder()
-                                .setSource("orkut")
-                                .setMedium("social")
-                                .setCampaign("example-promo")
-                                .build())
-                .setItunesConnectAnalyticsParameters(
-                        new DynamicLink.ItunesConnectAnalyticsParameters.Builder()
-                                .setProviderToken("123456")
-                                .setCampaignToken("example-promo")
-                                .build())
-                .setSocialMetaTagParameters(
-                        new DynamicLink.SocialMetaTagParameters.Builder()
-                                .setTitle("Example of a Dynamic Link")
-                                .setDescription("This link works whether the app is installed or not!")
-                                .build())
-                .buildDynamicLink();  // Or buildShortDynamicLink()
-
-        Task<ShortDynamicLink> shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
-                .setLongLink(dynamicLink.getUri())
-                .buildShortDynamicLink()
-                .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
-                    @Override
-                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
-                        if (task.isSuccessful()) {
-                            // Short link created
-                            Uri shortLink = task.getResult().getShortLink();
-                            Uri flowchartLink = task.getResult().getPreviewLink();
-                            Log.e(LOG_TAG, shortLink.toString());
-                        } else {
-                            // Error
-                            // ...
-                        }
-                    }
-                });
+    private void addFabSubItem() {
+        mFabShare.addActionItem(new SpeedDialActionItem.Builder(
+                R.id.fab_link, R.drawable.ic_fab_link_white_24)
+                .setFabBackgroundColor(getResources().getColor(R.color.colorPrimary))
+                .create()
+        );
+        mFabShare.addActionItem(new SpeedDialActionItem.Builder(
+                R.id.fab_facebook, R.drawable.ic_fab_facebook_white)
+                .setFabBackgroundColor(getResources().getColor(R.color.com_facebook_blue))
+                .create()
+        );
+        mFabShare.addActionItem(new SpeedDialActionItem.Builder(
+                R.id.fab_instagram, R.drawable.ic_fab_instagram_white)
+                .setFabBackgroundColor(getResources().getColor(R.color.instagramLogo))
+                .create()
+        );
+        mFabShare.addActionItem(new SpeedDialActionItem.Builder(
+                R.id.fab_twitter, R.drawable.ic_fab_twitter_white)
+                .setFabBackgroundColor(getResources().getColor(R.color.twiterLogo))
+                .create()
+        );
     }
 
     private void changeUIColors(Bitmap bitmap) {

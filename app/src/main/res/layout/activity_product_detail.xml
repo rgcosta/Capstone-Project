@@ -7,6 +7,17 @@
     android:fitsSystemWindows="true"
     tools:ignore="MergeRootFrame">
 
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom"
+        android:visibility="invisible"/>
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -138,19 +149,25 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.leinardi.android.speeddial.SpeedDialOverlayLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.leinardi.android.speeddial.SpeedDialView
         android:id="@+id/fab_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:clickable="true"
+        android:focusable="true"
+        android:layout_gravity="end|bottom"
         android:contentDescription="Share"
-        app:srcCompat="@drawable/ic_menu_send"
-        app:backgroundTint="@color/colorPrimary"
-        app:elevation="6dp"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        android:focusable="true" />
+        app:sdMainFabClosedSrc="@drawable/ic_menu_send"
+        app:sdMainFabOpenedSrc="@drawable/ic_close_white_24"
+        app:sdMainFabAnimationRotateAngle="90"
+        app:sdExpansionMode="top"
+        app:sdOverlayLayout="@id/overlay" />
+
 
 
 </android.support.design.widget.CoordinatorLayout>

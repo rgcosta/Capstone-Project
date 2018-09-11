@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="fab_link" type="id" />
+    <item name="fab_facebook" type="id" />
+    <item name="fab_instagram" type="id" />
+    <item name="fab_twitter" type="id" />
+</resources>
