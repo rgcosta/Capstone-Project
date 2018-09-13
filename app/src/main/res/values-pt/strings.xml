@@ -10,4 +10,6 @@
     <string name="contDescription_product_image">Imagem ilustrativa do produto</string>
     <string name="contDescription_price_icon">Icone do preço do produto</string>
     <string name="currency">R$</string>
+    <string name="snackbar_clipboard">Link copiado para área de transferência.</string>
+    <string name="fab_action_buy">Comprar</string>
 </resources>

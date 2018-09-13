@@ -12,4 +12,5 @@
     <dimen name="comp_card_sec_padding">32dp</dimen>
     <dimen name="grid_span_count">2</dimen>
     <dimen name="square_progressBar">42dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
 </resources>

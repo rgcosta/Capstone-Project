@@ -25,4 +25,6 @@
     <string name="contDescription_price_icon">Icone do preço do produto</string>
     <string name="currency">R$</string>
     <string name="commission_porcentage_label">%</string>
+    <string name="snackbar_clipboard">Link copied to your clipboard.</string>
+    <string name="fab_action_buy">Buy</string>
 </resources>

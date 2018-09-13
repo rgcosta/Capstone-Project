@@ -8,10 +8,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
@@ -30,14 +32,24 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
+import java.util.HashMap;
 import java.util.concurrent.Executor;
 
 import br.com.sociallinks.sociallinks.fragments.ProductsFragment;
@@ -45,6 +57,7 @@ import br.com.sociallinks.sociallinks.models.Product;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.support.design.widget.Snackbar.LENGTH_LONG;
 import static br.com.sociallinks.sociallinks.fragments.ProductsFragment.INTENT_PRODUCT_FLAG;
 
 public class ProductDetailActivity extends AppCompatActivity {
@@ -67,6 +80,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private Product mProduct;
     private Uri mShortDynamicLink;
+    private FirebaseUser mUser;
+    private FirebaseDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +95,9 @@ public class ProductDetailActivity extends AppCompatActivity {
             mProduct = intent.getParcelableExtra(INTENT_PRODUCT_FLAG);
         }
 
+        this.mUser = FirebaseAuth.getInstance().getCurrentUser();
+        this.mDatabase = FirebaseDatabase.getInstance();
+
         populateScreen();
 
         addFabSubItem();
@@ -91,6 +109,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                 switch (fabSelected){
                     case R.id.fab_link:
                         mLoadingIndicator.setVisibility(View.VISIBLE);
+
+                        mDatabase.getReference("offline").push().setValue(mProduct.getName());
+
                         Task<ShortDynamicLink> shortDynamicLinkTask = createDynamicLink();
 
                         shortDynamicLinkTask.addOnCompleteListener(new OnCompleteListener<ShortDynamicLink>() {
@@ -102,25 +123,38 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     mShortDynamicLink = task.getResult().getShortLink();
                                     Log.e(LOG_TAG, mShortDynamicLink.toString());
 
+                                    DatabaseReference dbRefShares = mDatabase.getReference("shares");
+                                    DatabaseReference dbRefProducts = mDatabase.getReference("products");
+
+                                    dbRefShares.child(mUser.getUid()).child("userName")
+                                            .setValue(mUser.getDisplayName());
+                                    dbRefShares.child(mUser.getUid()).child("links").child(String.valueOf(mProduct.getId()))
+                                            .setValue(mShortDynamicLink.toString());
+                                    dbRefProducts.child(String.valueOf(mProduct.getId()))
+                                            .setValue(mProduct);
+
                                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                                     ClipData clip = ClipData.newRawUri("shortLink", mShortDynamicLink);
                                     clipboard.setPrimaryClip(clip);
-                                    Toast.makeText(ProductDetailActivity.this, "Link copied to your clipboard.", Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(mFabShare, getString(R.string.snackbar_clipboard), LENGTH_LONG)
+                                            .show();
                                 } else {
                                     Log.e(LOG_TAG, "Fail to generate new dynamic link: " +
                                         task.getException());
+                                    //Snacbar to verifiy internet connetion
                                 }
                             }
                         });
                         return false;
+
                     case R.id.fab_facebook:
-                        Toast.makeText(ProductDetailActivity.this, "Facebook", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailActivity.this, "Facebook share will be implemented soon.", Toast.LENGTH_SHORT).show();
                         return false;
                     case R.id.fab_instagram:
-                        Toast.makeText(ProductDetailActivity.this, "Instagram", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailActivity.this, "Instagram share will be implemented soon.", Toast.LENGTH_SHORT).show();
                         return false;
                     case R.id.fab_twitter:
-                        Toast.makeText(ProductDetailActivity.this, "Twitter", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailActivity.this, "Twitter share will be implemented soon.", Toast.LENGTH_SHORT).show();
                         return false;
                     default:
                         return false;
@@ -130,10 +164,14 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private Task<ShortDynamicLink> createDynamicLink() {
-        Uri fullLinkUri = Uri.withAppendedPath(Uri.parse(BASE_URL), PATH_URL).buildUpon()
+        //https://www.sociallinks.com/{$userid}/product?id={$id}
+        Uri fullLinkUri = Uri.withAppendedPath(Uri.parse(BASE_URL), mUser.getUid()).buildUpon()
+                .appendPath(PATH_URL)
                 .appendQueryParameter(QUERY_KEY, String.valueOf(mProduct.getId())).build();
 
-        DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
+        Log.e(LOG_TAG, "fullLink: " + fullLinkUri.toString());
+
+        final DynamicLink dynamicLink = FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(fullLinkUri)
                 .setDynamicLinkDomain(DYNAMIC_LINK_DOMAIN)
                 .setAndroidParameters(
