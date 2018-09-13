@@ -65,7 +65,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private static final String LOG_TAG = ProductDetailActivity.class.getSimpleName();
     private static final String BASE_URL = "https://www.sociallinks.com";
     private static final String PATH_URL = "product";
-    private static final String QUERY_KEY = "id";
+    public static final String QUERY_KEY = "id";
     private static final String DYNAMIC_LINK_DOMAIN = "sociallinks.page.link";
 
     @BindView(R.id.tv_product_price_detailScreen) TextView mProductPrice;
@@ -109,8 +109,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                 switch (fabSelected){
                     case R.id.fab_link:
                         mLoadingIndicator.setVisibility(View.VISIBLE);
-
-                        mDatabase.getReference("offline").push().setValue(mProduct.getName());
 
                         Task<ShortDynamicLink> shortDynamicLinkTask = createDynamicLink();
 
@@ -272,6 +270,5 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 }

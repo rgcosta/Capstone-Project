@@ -27,4 +27,5 @@
     <string name="commission_porcentage_label">%</string>
     <string name="snackbar_clipboard">Link copied to your clipboard.</string>
     <string name="fab_action_buy">Buy</string>
+    <string name="snackbar_retrieve_link_error">Link was not found.</string>
 </resources>

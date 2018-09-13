@@ -12,4 +12,5 @@
     <string name="currency">R$</string>
     <string name="snackbar_clipboard">Link copiado para área de transferência.</string>
     <string name="fab_action_buy">Comprar</string>
+    <string name="snackbar_retrieve_link_error">Link não foi encontrado.</string>
 </resources>

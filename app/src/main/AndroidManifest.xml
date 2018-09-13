@@ -36,7 +36,12 @@
                 android:value=".ProductsActivity" />
         </activity>
         <activity
-            android:name=".ProductSharedActivity">
+            android:name=".ProductSharedActivity"
+            android:parentActivityName=".ProductsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ProductsActivity" />
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
