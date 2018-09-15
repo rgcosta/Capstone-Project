@@ -53,6 +53,7 @@ import java.util.HashMap;
 import java.util.concurrent.Executor;
 
 import br.com.sociallinks.sociallinks.fragments.ProductsFragment;
+import br.com.sociallinks.sociallinks.models.Link;
 import br.com.sociallinks.sociallinks.models.Product;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,8 +65,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = ProductDetailActivity.class.getSimpleName();
     private static final String BASE_URL = "https://www.sociallinks.com";
-    private static final String PATH_URL = "product";
-    public static final String QUERY_KEY = "id";
+    public static final String QUERY_KEY = "product";
     private static final String DYNAMIC_LINK_DOMAIN = "sociallinks.page.link";
 
     @BindView(R.id.tv_product_price_detailScreen) TextView mProductPrice;
@@ -121,13 +121,17 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     mShortDynamicLink = task.getResult().getShortLink();
                                     Log.e(LOG_TAG, mShortDynamicLink.toString());
 
+                                    Link link = new Link(mShortDynamicLink.toString(), mProduct.getId(),
+                                            mProduct.getName(), mProduct.getPrice(), mProduct.getPhotoUrl(),
+                                            mProduct.getCommission());
+
                                     DatabaseReference dbRefShares = mDatabase.getReference("shares");
                                     DatabaseReference dbRefProducts = mDatabase.getReference("products");
 
                                     dbRefShares.child(mUser.getUid()).child("userName")
                                             .setValue(mUser.getDisplayName());
                                     dbRefShares.child(mUser.getUid()).child("links").child(String.valueOf(mProduct.getId()))
-                                            .setValue(mShortDynamicLink.toString());
+                                            .setValue(link);
                                     dbRefProducts.child(String.valueOf(mProduct.getId()))
                                             .setValue(mProduct);
 
@@ -162,9 +166,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private Task<ShortDynamicLink> createDynamicLink() {
-        //https://www.sociallinks.com/{$userid}/product?id={$id}
+        //https://www.sociallinks.com/{$userid}?product={$id}
         Uri fullLinkUri = Uri.withAppendedPath(Uri.parse(BASE_URL), mUser.getUid()).buildUpon()
-                .appendPath(PATH_URL)
                 .appendQueryParameter(QUERY_KEY, String.valueOf(mProduct.getId())).build();
 
         Log.e(LOG_TAG, "fullLink: " + fullLinkUri.toString());
@@ -179,6 +182,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                         //for test purposes
                         new DynamicLink.IosParameters.Builder("com.sociallinks.ios")
                                 .setAppStoreId("123456789")
+                                .setFallbackUrl(Uri.parse("https://www.placenpepper.com"))
+                                .setIpadFallbackUrl(Uri.parse("https://www.placenpepper.com"))
                                 .build())
                 .setGoogleAnalyticsParameters(
                         new DynamicLink.GoogleAnalyticsParameters.Builder()

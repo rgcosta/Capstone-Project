@@ -13,4 +13,11 @@
     <string name="snackbar_clipboard">Link copiado para área de transferência.</string>
     <string name="fab_action_buy">Comprar</string>
     <string name="snackbar_retrieve_link_error">Link não foi encontrado.</string>
+    <string name="snackbar_buy_successful_message">Parabéns! Seu produto será entregue em breve.</string>
+    <string name="snackbar_buy_fail_message">Desculpe, ocorreu um erro durante sua compra.</string>
+    <string name="no_links_message">Você ainda não compartilhou nenhum link.</string>
+    <string name="product_removed">removido da sua lista.</string>
+    <string name="undo_product_removed">DESFAZER</string>
+    <string name="contDescription_delete_icon">Icone de deletar produto</string>
+    <string name="delete">DELETAR</string>
 </resources>

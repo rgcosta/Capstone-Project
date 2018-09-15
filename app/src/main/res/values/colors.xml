@@ -11,5 +11,6 @@
     <color name="divider">#BDBDBD</color>
     <color name="instagramLogo">#cd486b</color>
     <color name="twiterLogo">#0084b4</color>
+    <color name="background_link_delete">#fa315b</color>
 </resources>
 

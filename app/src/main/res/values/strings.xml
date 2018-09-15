@@ -28,4 +28,12 @@
     <string name="snackbar_clipboard">Link copied to your clipboard.</string>
     <string name="fab_action_buy">Buy</string>
     <string name="snackbar_retrieve_link_error">Link was not found.</string>
+    <string name="snackbar_buy_successful_message">Congrats! Your product will be delivered soon.</string>
+    <string name="snackbar_buy_fail_message">Sorry. An error occurred related to your buy</string>
+    <string name="no_links_message">You haven\'t shared any link yet.</string>
+    <string name="product_removed">removed from your list.</string>
+    <string name="undo_product_removed">UNDO</string>
+    <string name="concat_suffix_to_short_product_name">… </string>
+    <string name="contDescription_delete_icon">Delete icon</string>
+    <string name="delete">DELETE</string>
 </resources>

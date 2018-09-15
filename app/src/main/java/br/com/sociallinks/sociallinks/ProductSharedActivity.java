@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
@@ -23,16 +25,20 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
+import br.com.sociallinks.sociallinks.models.Link;
 import br.com.sociallinks.sociallinks.models.Product;
 import br.com.sociallinks.sociallinks.utils.FirebasePersistance;
 import butterknife.BindView;
@@ -45,6 +51,7 @@ public class ProductSharedActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = ProductSharedActivity.class.getSimpleName();
     private static final String PRODUCT_KEY = "product_key";
+    private static final String USER_ID_KEY = "user_id_key";
 
     @BindView(R.id.tv_product_price_shopScreen) TextView mProductPrice;
     @BindView(R.id.tv_product_commission_shopScreen) TextView mProductCommission;
@@ -53,9 +60,12 @@ public class ProductSharedActivity extends AppCompatActivity {
     @BindView(R.id.meta_bar_shopScreen) LinearLayout mMetaBar;
     @BindView(R.id.toolbar_detailed_shopScreen) Toolbar mToolbar;
     @BindView(R.id.collapsingToolbar_layout_shopScreen) CollapsingToolbarLayout mCollapsingToolbar;
+    @BindView(R.id.movie_detail_container_shopScreen) NestedScrollView mNestedScrollView;
+    @BindView(R.id.fab_buy) FloatingActionButton mFabBuy;
 
     private FirebaseDatabase mDatabase;
     private Product mProduct;
+    private String mUserIdSharedLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +78,7 @@ public class ProductSharedActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(PRODUCT_KEY))
                 mProduct = savedInstanceState.getParcelable(PRODUCT_KEY);
+            mUserIdSharedLink = savedInstanceState.getString(USER_ID_KEY);
         }
 
         if (mProduct == null) {
@@ -76,6 +87,46 @@ public class ProductSharedActivity extends AppCompatActivity {
             Log.e(LOG_TAG, "Reusing mProduct");
             populateScreen();
         }
+
+        mFabBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mProduct == null) {
+                    return;
+                }
+                DatabaseReference dbRefBuyCounts = mDatabase.getReference( "shares");
+                dbRefBuyCounts.child(mUserIdSharedLink).child("links").child(String.valueOf(mProduct.getId()))
+                        .runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+
+                        Link currentLinkShared = mutableData.getValue(Link.class);
+                        if (currentLinkShared == null) {
+                            return Transaction.success(mutableData);
+                        }
+
+                        int incCount = currentLinkShared.getBuyCounts() + 1;
+                        currentLinkShared.setBuyCounts(incCount);
+                        mutableData.setValue(currentLinkShared);
+
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, boolean committed, @Nullable DataSnapshot dataSnapshot) {
+                        if (committed) {
+                            Snackbar.make(mNestedScrollView, getString(R.string.snackbar_buy_successful_message), LENGTH_LONG)
+                                    .show();
+                        } else {
+                            Log.e(LOG_TAG, "Fab - " + databaseError.toException());
+                            Snackbar.make(mNestedScrollView, getString(R.string.snackbar_buy_fail_message), LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+                });
+            }
+        });
 
     }
 
@@ -88,15 +139,18 @@ public class ProductSharedActivity extends AppCompatActivity {
                         if (pendingDynamicLinkData != null) {
 
                             Uri deepLink = pendingDynamicLinkData.getLink();
-                            Log.e(LOG_TAG, "Link captured: " + deepLink.toString());
 
-                            DatabaseReference dbRefProductId = mDatabase.getReference("products/"
-                                    + deepLink.getQueryParameter(QUERY_KEY));
+                            String productId = deepLink.getQueryParameter(QUERY_KEY);
+                            mUserIdSharedLink = deepLink.getLastPathSegment();
+                            Log.e(LOG_TAG, "Link captured: " + deepLink.toString() + " - " + mUserIdSharedLink);
+
+                            DatabaseReference dbRefProductId =
+                                    mDatabase.getReference("products/" + productId);
 
                             dbRefProductId.addValueEventListener(getProductListener());
 
                         } else {
-                            Snackbar.make(findViewById(R.id.movie_detail_container_shopScreen),
+                            Snackbar.make(mNestedScrollView,
                                     getString(R.string.snackbar_retrieve_link_error), LENGTH_LONG)
                                     .show();
                         }
@@ -180,7 +234,7 @@ public class ProductSharedActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         if (mProduct != null)
             outState.putParcelable(PRODUCT_KEY, mProduct);
-
+        outState.putString(USER_ID_KEY, mUserIdSharedLink);
         super.onSaveInstanceState(outState);
     }
 }
