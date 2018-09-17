@@ -1,6 +1,7 @@
 package br.com.sociallinks.sociallinks.utils;
 
 import android.app.Application;
+import android.content.ComponentCallbacks;
 import android.util.Log;
 
 import com.google.firebase.database.FirebaseDatabase;
@@ -15,4 +16,6 @@ public class FirebasePersistance extends Application {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         Log.e(LOG_TAG, "PERSISTANCE WAS ENABLED");
     }
+
+
 }

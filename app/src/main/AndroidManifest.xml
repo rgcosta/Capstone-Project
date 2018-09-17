@@ -25,8 +25,7 @@
         <activity
             android:name=".ProductsActivity"
             android:label="@string/title_activity_products"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ProductDetailActivity"
             android:parentActivityName=".ProductsActivity"
@@ -42,13 +41,23 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ProductsActivity" />
+
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="www.sociallinks.com" android:scheme="http"/>
-                <data android:host="www.sociallinks.com" android:scheme="https"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.sociallinks.com"
+                    android:scheme="http" />
+                <data
+                    android:host="www.sociallinks.com"
+                    android:scheme="https" />
             </intent-filter>
+        </activity>
+        <activity android:name=".NoInternetActivity">
+
         </activity>
     </application>
 

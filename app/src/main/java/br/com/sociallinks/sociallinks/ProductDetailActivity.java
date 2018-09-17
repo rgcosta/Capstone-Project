@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -43,6 +44,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
@@ -55,13 +57,14 @@ import java.util.concurrent.Executor;
 import br.com.sociallinks.sociallinks.fragments.ProductsFragment;
 import br.com.sociallinks.sociallinks.models.Link;
 import br.com.sociallinks.sociallinks.models.Product;
+import br.com.sociallinks.sociallinks.utils.NetworkStateReceiver;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.design.widget.Snackbar.LENGTH_LONG;
 import static br.com.sociallinks.sociallinks.fragments.ProductsFragment.INTENT_PRODUCT_FLAG;
 
-public class ProductDetailActivity extends AppCompatActivity {
+public class ProductDetailActivity extends AppCompatActivity implements NetworkStateReceiver.NetworkStateReceiverListener {
 
     private static final String LOG_TAG = ProductDetailActivity.class.getSimpleName();
     private static final String BASE_URL = "https://www.sociallinks.com";
@@ -82,6 +85,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private Uri mShortDynamicLink;
     private FirebaseUser mUser;
     private FirebaseDatabase mDatabase;
+    private NetworkStateReceiver mNetworkStateReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +97,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra(INTENT_PRODUCT_FLAG)) {
             mProduct = intent.getParcelableExtra(INTENT_PRODUCT_FLAG);
+            Log.e(LOG_TAG, "INTENT_PRODUCT_FLAG:exists1");
         }
+
+        mNetworkStateReceiver = new NetworkStateReceiver();
+        mNetworkStateReceiver.addListener(this);
+        this.registerReceiver(mNetworkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
 
         this.mUser = FirebaseAuth.getInstance().getCurrentUser();
         this.mDatabase = FirebaseDatabase.getInstance();
@@ -138,7 +147,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                                     ClipData clip = ClipData.newRawUri("shortLink", mShortDynamicLink);
                                     clipboard.setPrimaryClip(clip);
-                                    Snackbar.make(mFabShare, getString(R.string.snackbar_clipboard), LENGTH_LONG)
+                                    Snackbar.make(mCollapsingToolbar, getString(R.string.snackbar_clipboard), LENGTH_LONG)
                                             .show();
                                 } else {
                                     Log.e(LOG_TAG, "Fail to generate new dynamic link: " +
@@ -275,5 +284,25 @@ public class ProductDetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void networkAvailable() {
+
+    }
+
+    @Override
+    public void networkUnavailable() {
+        Log.e(LOG_TAG, "networkUnavailable");
+        Intent intent = new Intent(this, NoInternetActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mNetworkStateReceiver.removeListener(this);
+        this.unregisterReceiver(mNetworkStateReceiver);
+        Log.e(LOG_TAG, "networkStateReceiverListener:Removed");
     }
 }

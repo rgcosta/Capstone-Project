@@ -20,4 +20,8 @@
     <string name="undo_product_removed">DESFAZER</string>
     <string name="contDescription_delete_icon">Icone de deletar produto</string>
     <string name="delete">DELETAR</string>
+    <string name="contDescription_icon_no_internet">Icone de sem conexão de internet.</string>
+    <string name="button_try_again">Fechar Mensagem</string>
+    <string name="no_internet_message">Você está offline. Por favor, verifique sua conexão à internet.</string>
+    <string name="trying_reconnect">Tentando reconectar…</string>
 </resources>

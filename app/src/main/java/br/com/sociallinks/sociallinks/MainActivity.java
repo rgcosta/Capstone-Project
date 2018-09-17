@@ -1,6 +1,7 @@
 package br.com.sociallinks.sociallinks;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -27,18 +28,25 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import br.com.sociallinks.sociallinks.utils.NetworkStateReceiver;
+
+public class MainActivity extends AppCompatActivity implements NetworkStateReceiver.NetworkStateReceiverListener{
 
     private static final int RC_SIGN_IN = 123;
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private FirebaseAuth mAuth;
+    private NetworkStateReceiver mNetworkStateReceiver;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mNetworkStateReceiver = new NetworkStateReceiver();
+        mNetworkStateReceiver.addListener(this);
+        this.registerReceiver(mNetworkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
 
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
@@ -125,5 +133,24 @@ public class MainActivity extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
             Log.e("KeyHash:", e.toString());
         }
+    }
+
+    @Override
+    public void networkAvailable() {
+
+    }
+
+    @Override
+    public void networkUnavailable() {
+        Intent intent = new Intent(this, NoInternetActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mNetworkStateReceiver.removeListener(this);
+        this.unregisterReceiver(mNetworkStateReceiver);
+        Log.e(LOG_TAG, "mNetworkStateReceiver:removed - MainActv");
     }
 }

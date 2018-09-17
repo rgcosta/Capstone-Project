@@ -13,7 +13,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:indeterminate="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/progressBar_link_height"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom"
         android:visibility="invisible"/>

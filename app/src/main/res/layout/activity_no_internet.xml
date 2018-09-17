@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical|center_horizontal"
+    android:background="@color/colorPrimaryLight"
+    android:orientation="vertical"
+    tools:context=".NoInternetActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/contDescription_icon_no_internet"
+        app:srcCompat="@drawable/ic_no_internet_white_24" />
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:textAlignment="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="@string/no_internet_message" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_trying_reconnect"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
+        android:layout_marginTop="@dimen/progressbar_reconnect_marginTop"
+        android:layout_width="@dimen/progressBar_reconnect_width"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_trying_reconnect_label"
+        style="@style/TextAppearance.AppCompat.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:text="@string/trying_reconnect" />
+
+
+</LinearLayout>

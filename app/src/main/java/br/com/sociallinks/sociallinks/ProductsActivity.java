@@ -2,6 +2,7 @@ package br.com.sociallinks.sociallinks;
 
 import android.content.Intent;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -29,18 +31,24 @@ import com.google.firebase.auth.FirebaseUser;
 import br.com.sociallinks.sociallinks.adapters.ProductsAdapter;
 import br.com.sociallinks.sociallinks.fragments.LinksFragment;
 import br.com.sociallinks.sociallinks.fragments.ProductsFragment;
+import br.com.sociallinks.sociallinks.utils.NetworkStateReceiver;
 
 public class ProductsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NetworkStateReceiver.NetworkStateReceiverListener {
 
     private static final String LOG_TAG = ProductsActivity.class.getSimpleName();
 
     private ProductsFragment mProductsFragment;
+    private NetworkStateReceiver mNetworkStateReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+
+        mNetworkStateReceiver = new NetworkStateReceiver();
+        mNetworkStateReceiver.addListener(this);
+        this.registerReceiver(mNetworkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -166,5 +174,21 @@ public class ProductsActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void networkAvailable() {
 
+    }
+
+    @Override
+    public void networkUnavailable() {
+        Intent intent = new Intent(this, NoInternetActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mNetworkStateReceiver.removeListener(this);
+        this.unregisterReceiver(mNetworkStateReceiver);
+    }
 }
