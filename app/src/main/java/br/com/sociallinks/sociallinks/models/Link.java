@@ -1,7 +1,10 @@
 package br.com.sociallinks.sociallinks.models;
 
 
-public class Link {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Link implements Parcelable {
 
     private int productId;  //same id used for the link index
     private String productName;
@@ -25,6 +28,28 @@ public class Link {
         this.commission = commission;
 
     }
+
+    protected Link(Parcel in) {
+        productId = in.readInt();
+        productName = in.readString();
+        productPrice = in.readDouble();
+        productPhotoUrl = in.readString();
+        commission = in.readInt();
+        buyCounts = in.readInt();
+        link = in.readString();
+    }
+
+    public static final Creator<Link> CREATOR = new Creator<Link>() {
+        @Override
+        public Link createFromParcel(Parcel in) {
+            return new Link(in);
+        }
+
+        @Override
+        public Link[] newArray(int size) {
+            return new Link[size];
+        }
+    };
 
     public int getBuyCounts() {
         return buyCounts;
@@ -80,5 +105,21 @@ public class Link {
 
     public void setProductPhotoUrl(String productPhotoUrl) {
         this.productPhotoUrl = productPhotoUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(productId);
+        dest.writeString(productName);
+        dest.writeDouble(productPrice);
+        dest.writeString(productPhotoUrl);
+        dest.writeInt(commission);
+        dest.writeInt(buyCounts);
+        dest.writeString(link);
     }
 }

@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,12 +49,14 @@ public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClick
         RecyclerLinkTouchHelper.RecyclerLinkTouchHelperListener {
 
     private static final String LOG_TAG = LinksFragment.class.getSimpleName();
+    private static final String LINKS_KEY = "links_key";
 
     private DatabaseReference mDbRefLinks;
     private LinksAdapter mLinksAdapter;
     private RecyclerView mLinksRecyclerView;
     private TextView mNoLinksMessageTextView;
     private ValueEventListener mLinksListener;
+    private List<Link> mLinks = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -67,13 +71,32 @@ public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClick
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_links, container, false);
 
+        initializeRecyclerView(rootView);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(LINKS_KEY)){
+                mLinks = savedInstanceState.getParcelableArrayList(LINKS_KEY);
+            }
+        }
+
+
+        if (mLinks.isEmpty() || mLinks == null) {
+            retrieveLinksFromServer();
+        } else {
+            Log.e(LOG_TAG, "Reuses existing links for rotated screen!!");
+            mLinksAdapter.setLinksData(mLinks);
+            retrieveLinksFromServer();
+        }
+
+        return rootView;
+    }
+
+    private void retrieveLinksFromServer() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null){
-            return rootView;
+            return;
         }
-
-        initializeRecyclerView(rootView);
 
         mDbRefLinks = database.getReference("shares").child(user.getUid())
                 .child("links");
@@ -92,6 +115,7 @@ public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClick
                     mNoLinksMessageTextView.setVisibility(View.INVISIBLE);
                     mLinksRecyclerView.setVisibility(View.VISIBLE);
                     mLinksAdapter.setLinksData(linksData);
+                    mLinks = linksData;
                 }
                 else {
                     mLinksRecyclerView.setVisibility(View.INVISIBLE);
@@ -104,8 +128,6 @@ public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClick
                 Log.e(LOG_TAG, "Fail to retrieve data: " + databaseError.toException());
             }
         });
-
-        return rootView;
     }
 
     private void initializeRecyclerView(View rootView) {
@@ -166,6 +188,15 @@ public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClick
                 })
                 .setActionTextColor(getResources().getColor(R.color.colorAccent))
                 .show();
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if (mLinks != null)
+            outState.putParcelableArrayList(LINKS_KEY, (ArrayList<? extends Parcelable>) mLinks);
+
+        super.onSaveInstanceState(outState);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
