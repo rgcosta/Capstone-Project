@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -37,14 +38,26 @@ public class ProductsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NetworkStateReceiver.NetworkStateReceiverListener {
 
     private static final String LOG_TAG = ProductsActivity.class.getSimpleName();
+    private static final String NAV_PRODUCTS_KEY = "nav_products_key";
+    private static final String NAV_LINKS_KEY = "nav_links_key";
 
     private ProductsFragment mProductsFragment;
+    private LinksFragment mLinksFragment;
     private NetworkStateReceiver mNetworkStateReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
+
+        if (savedInstanceState != null){
+            if (savedInstanceState.containsKey(NAV_PRODUCTS_KEY)){
+                mProductsFragment = savedInstanceState.getParcelable(NAV_PRODUCTS_KEY);
+            }
+            if (savedInstanceState.containsKey(NAV_LINKS_KEY)) {
+                mLinksFragment = savedInstanceState.getParcelable(NAV_LINKS_KEY);
+            }
+        }
 
         mNetworkStateReceiver = new NetworkStateReceiver();
         mNetworkStateReceiver.addListener(this);
@@ -62,7 +75,13 @@ public class ProductsActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        //First NavigationView item selection
+        if (mProductsFragment == null) {
+            mProductsFragment = new ProductsFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, mProductsFragment)
+                    .commit();
+        }
 
         setUserProfileMenu(navigationView);
     }
@@ -100,77 +119,70 @@ public class ProductsActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.products, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_products) {
-            // Handle the products action
-            mProductsFragment = new ProductsFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        switch (id) {
+            case R.id.nav_products :
+                if (mProductsFragment == null) {
+                    mProductsFragment = new ProductsFragment();
+                }
 
-            // Insert the fragment by replacing any existing fragment
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, mProductsFragment)
-                    .commit();
-        } else if (id == R.id.nav_links) {
-
-            LinksFragment linksFragment = new LinksFragment();
-
-            // Insert the fragment by replacing any existing fragment
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, linksFragment)
-                    .commit();
-
-        } else if (id == R.id.nav_favorites) {
-            Intent intent = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_settings) {
-
-        } else if (id == R.id.nav_account) {
-
-        } else if (id == R.id.nav_logout) {
-            AuthUI.getInstance()
-                    .signOut(this)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                startActivity(intent);
-                                finish();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, mProductsFragment)
+                        .commit();
+                break;
+            case R.id.nav_links:
+                if (mLinksFragment == null){
+                    mLinksFragment = new LinksFragment();
+                }
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, mLinksFragment)
+                        .commit();
+                break;
+            case R.id.nav_favorites:
+                Toast.makeText(this, getString(R.string.future_feature_message), Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            case R.id.nav_settings:
+                Toast.makeText(this, getString(R.string.future_feature_message), Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            case R.id.nav_account:
+                Toast.makeText(this, getString(R.string.future_feature_message), Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            case R.id.nav_logout:
+                AuthUI.getInstance()
+                        .signOut(this)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    startActivity(intent);
+                                    finish();
+                                }
                             }
-                        }
-                    });
+                        });
+                break;
+            default:
+                if (mProductsFragment == null) {
+                    mProductsFragment = new ProductsFragment();
+                }
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, mProductsFragment)
+                        .commit();
+                break;
+
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -200,5 +212,16 @@ public class ProductsActivity extends AppCompatActivity
         super.onStop();
         mNetworkStateReceiver.removeListener(this);
         this.unregisterReceiver(mNetworkStateReceiver);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (mProductsFragment != null) {
+            outState.putParcelable(NAV_PRODUCTS_KEY, mProductsFragment);
+        }
+        if (mLinksFragment != null) {
+            outState.putParcelable(NAV_LINKS_KEY, mLinksFragment);
+        }
+        super.onSaveInstanceState(outState);
     }
 }

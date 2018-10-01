@@ -1,10 +1,12 @@
 package br.com.sociallinks.sociallinks.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -46,7 +48,7 @@ import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 
 public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClickHandler,
-        RecyclerLinkTouchHelper.RecyclerLinkTouchHelperListener {
+        RecyclerLinkTouchHelper.RecyclerLinkTouchHelperListener, Parcelable {
 
     private static final String LOG_TAG = LinksFragment.class.getSimpleName();
     private static final String LINKS_KEY = "links_key";
@@ -64,6 +66,23 @@ public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClick
         // Required empty public constructor
     }
 
+
+    @SuppressLint("ValidFragment")
+    protected LinksFragment(Parcel in) {
+        mLinks = in.createTypedArrayList(Link.CREATOR);
+    }
+
+    public static final Creator<LinksFragment> CREATOR = new Creator<LinksFragment>() {
+        @Override
+        public LinksFragment createFromParcel(Parcel in) {
+            return new LinksFragment(in);
+        }
+
+        @Override
+        public LinksFragment[] newArray(int size) {
+            return new LinksFragment[size];
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -225,7 +244,15 @@ public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClick
         mListener = null;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(mLinks);
+    }
 
 
     /**

@@ -1,8 +1,10 @@
 package br.com.sociallinks.sociallinks.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -32,7 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductsFragment extends Fragment implements ProductsAdapter.ProductsOnClickHandler {
+public class ProductsFragment extends Fragment implements ProductsAdapter.ProductsOnClickHandler, Parcelable{
 
     private static final String LOG_TAG = ProductsFragment.class.getSimpleName();
     private static final String LIST_PRODUCTS_KEY = "list_products_key";
@@ -47,6 +49,23 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
         // Required empty public constructor
     }
 
+
+    @SuppressLint("ValidFragment")
+    protected ProductsFragment(Parcel in) {
+        mProducts = in.createTypedArrayList(Product.CREATOR);
+    }
+
+    public static final Creator<ProductsFragment> CREATOR = new Creator<ProductsFragment>() {
+        @Override
+        public ProductsFragment createFromParcel(Parcel in) {
+            return new ProductsFragment(in);
+        }
+
+        @Override
+        public ProductsFragment[] newArray(int size) {
+            return new ProductsFragment[size];
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -144,6 +163,16 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
         Intent intent = new Intent(getContext(), ProductDetailActivity.class);
         intent.putExtra(INTENT_PRODUCT_FLAG, product);
         startActivity(intent);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(mProducts);
     }
 
     /**
