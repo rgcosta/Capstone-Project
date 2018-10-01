@@ -43,8 +43,6 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
     private ProductsAdapter mProductsAdapter;
     private List<Product> mProducts = new ArrayList<>();
 
-    private OnFragmentInteractionListener mListener;
-
     public ProductsFragment() {
         // Required empty public constructor
     }
@@ -132,32 +130,6 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    /*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-    */
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
     @Override
     public void onClick(Product product) {
         Intent intent = new Intent(getContext(), ProductDetailActivity.class);
@@ -173,20 +145,5 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(mProducts);
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }
