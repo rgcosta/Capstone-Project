@@ -24,4 +24,5 @@
     <string name="button_try_again">Fechar Mensagem</string>
     <string name="no_internet_message">Você está offline. Por favor, verifique sua conexão à internet.</string>
     <string name="trying_reconnect">Tentando reconectar…</string>
+    <string name="button_close_message">Fechar essa mensagem</string>
 </resources>

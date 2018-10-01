@@ -40,4 +40,5 @@
     <string name="button_try_again">Close Message</string>
     <string name="no_internet_message">You are offline. Please, check your internet connection.</string>
     <string name="trying_reconnect">Trying to reconnect…</string>
+    <string name="button_close_message">Close this message</string>
 </resources>

@@ -20,4 +20,6 @@
     <dimen name="progressbar_reconnect_marginTop">16dp</dimen>
     <dimen name="progressBar_reconnect_width">120dp</dimen>
     <dimen name="progressBar_link_height">32dp</dimen>
+    <dimen name="button_close_message_top_margin">160dp</dimen>
+    <dimen name="button_close_message_padding">16dp</dimen>
 </resources>

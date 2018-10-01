@@ -147,8 +147,16 @@ public class MainActivity extends AppCompatActivity implements NetworkStateRecei
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onRestart() {
+        super.onRestart();
+        mNetworkStateReceiver = new NetworkStateReceiver();
+        mNetworkStateReceiver.addListener(this);
+        this.registerReceiver(mNetworkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         mNetworkStateReceiver.removeListener(this);
         this.unregisterReceiver(mNetworkStateReceiver);
         Log.e(LOG_TAG, "mNetworkStateReceiver:removed - MainActv");

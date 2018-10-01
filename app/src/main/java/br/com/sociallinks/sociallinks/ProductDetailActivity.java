@@ -293,16 +293,22 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkS
 
     @Override
     public void networkUnavailable() {
-        Log.e(LOG_TAG, "networkUnavailable");
         Intent intent = new Intent(this, NoInternetActivity.class);
         startActivity(intent);
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onRestart() {
+        super.onRestart();
+        mNetworkStateReceiver = new NetworkStateReceiver();
+        mNetworkStateReceiver.addListener(this);
+        this.registerReceiver(mNetworkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         mNetworkStateReceiver.removeListener(this);
         this.unregisterReceiver(mNetworkStateReceiver);
-        Log.e(LOG_TAG, "networkStateReceiverListener:Removed");
     }
 }

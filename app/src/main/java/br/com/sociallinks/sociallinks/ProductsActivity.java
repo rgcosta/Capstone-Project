@@ -127,7 +127,7 @@ public class ProductsActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_products) {
-            // Handle the camera action
+            // Handle the products action
             mProductsFragment = new ProductsFragment();
 
             // Insert the fragment by replacing any existing fragment
@@ -186,8 +186,16 @@ public class ProductsActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onRestart() {
+        super.onRestart();
+        mNetworkStateReceiver = new NetworkStateReceiver();
+        mNetworkStateReceiver.addListener(this);
+        this.registerReceiver(mNetworkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         mNetworkStateReceiver.removeListener(this);
         this.unregisterReceiver(mNetworkStateReceiver);
     }

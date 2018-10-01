@@ -41,5 +41,5 @@
         android:textColor="@android:color/white"
         android:text="@string/trying_reconnect" />
 
-
 </LinearLayout>
+
