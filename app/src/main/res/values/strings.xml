@@ -5,7 +5,6 @@
     <string name="facebook_application_id" translatable="false">237301026961796</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb237301026961796</string>
 
-    <string name="title_activity_products" translatable="false">ProductsActivity</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="nav_header_title" translatable="false">Android Studio</string>
