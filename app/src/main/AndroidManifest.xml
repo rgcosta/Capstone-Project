@@ -25,7 +25,7 @@
         <activity
             android:name=".ProductsActivity"
             android:label="@string/title_activity_products"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ProductDetailActivity"
             android:parentActivityName=".ProductsActivity"
@@ -59,6 +59,21 @@
         <activity android:name=".NoInternetActivity">
 
         </activity>
+
+        <receiver android:name=".widget.LinksWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/links_widget_provider_info" />
+        </receiver>
+        <service android:name=".widget.LinksWidgetService"
+            android:permission="android.permission.FOREGROUND_SERVICE"/>
+
+        <service android:name=".widget.ListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
     </application>
 
 </manifest>

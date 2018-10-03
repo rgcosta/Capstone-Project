@@ -26,4 +26,5 @@
     <string name="trying_reconnect">Tentando reconectar…</string>
     <string name="button_close_message">Fechar essa mensagem</string>
     <string name="future_feature_message">Função será implementada em breve.</string>
+    <string name="widget_description">Recupera links do servidor.</string>
 </resources>

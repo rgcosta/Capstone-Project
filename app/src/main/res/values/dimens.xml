@@ -22,4 +22,11 @@
     <dimen name="progressBar_link_height">32dp</dimen>
     <dimen name="button_close_message_top_margin">160dp</dimen>
     <dimen name="button_close_message_padding">16dp</dimen>
+    <dimen name="widget_product_image_size">65dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
 </resources>
