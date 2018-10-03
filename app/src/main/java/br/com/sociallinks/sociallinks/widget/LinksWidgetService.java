@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,7 +27,6 @@ import java.util.List;
 
 import br.com.sociallinks.sociallinks.R;
 import br.com.sociallinks.sociallinks.models.Link;
-import br.com.sociallinks.sociallinks.utils.NetworkUtils;
 
 import static br.com.sociallinks.sociallinks.utils.NetworkUtils.*;
 
