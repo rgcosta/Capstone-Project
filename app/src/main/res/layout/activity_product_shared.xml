@@ -54,7 +54,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tv_product_price_signal_shopScreen"
                         style="@style/TextAppearance.AppCompat.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -84,7 +83,6 @@
                         android:textColor="@color/divider" />
 
                     <TextView
-                        android:id="@+id/tv_commission_porc_label_shopScreen"
                         style="@style/TextAppearance.AppCompat.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

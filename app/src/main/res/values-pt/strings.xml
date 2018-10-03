@@ -21,10 +21,8 @@
     <string name="contDescription_delete_icon">Icone de deletar produto</string>
     <string name="delete">DELETAR</string>
     <string name="contDescription_icon_no_internet">Icone de sem conexão de internet.</string>
-    <string name="button_try_again">Fechar Mensagem</string>
     <string name="no_internet_message">Você está offline. Por favor, verifique sua conexão à internet.</string>
     <string name="trying_reconnect">Tentando reconectar…</string>
-    <string name="button_close_message">Fechar essa mensagem</string>
     <string name="future_feature_message">Função será implementada em breve.</string>
     <string name="widget_description">Recupera links do servidor.</string>
     <string name="fab_facebook_soon">Compartilhamento do Facebook será implementado em breve.</string>

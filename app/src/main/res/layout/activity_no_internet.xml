@@ -10,14 +10,12 @@
     tools:context=".NoInternetActivity">
 
     <ImageView
-        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/contDescription_icon_no_internet"
         app:srcCompat="@drawable/ic_no_internet_white_24" />
 
     <TextView
-        android:id="@+id/textView"
         style="@style/TextAppearance.AppCompat.Medium"
         android:textAlignment="center"
         android:layout_width="wrap_content"
@@ -26,7 +24,6 @@
         android:text="@string/no_internet_message" />
 
     <ProgressBar
-        android:id="@+id/progressBar_trying_reconnect"
         style="?android:attr/progressBarStyleHorizontal"
         android:indeterminate="true"
         android:layout_marginTop="@dimen/progressbar_reconnect_marginTop"
@@ -34,7 +31,6 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/tv_trying_reconnect_label"
         style="@style/TextAppearance.AppCompat.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -10,18 +10,13 @@
     <dimen name="margin_cards">4dp</dimen>
     <dimen name="comp_card_padding">16dp</dimen>
     <dimen name="comp_card_sec_padding">32dp</dimen>
-    <dimen name="grid_span_count">2</dimen>
-    <dimen name="square_progressBar">42dp</dimen>
     <dimen name="fab_elevation">6dp</dimen>
     <dimen name="icon_delete_layout">30dp</dimen>
     <dimen name="icon_delete_margin">10dp</dimen>
     <dimen name="delete_text_size">13sp</dimen>
-    <dimen name="button_try_again_margin">16dp</dimen>
     <dimen name="progressbar_reconnect_marginTop">16dp</dimen>
     <dimen name="progressBar_reconnect_width">120dp</dimen>
     <dimen name="progressBar_link_height">32dp</dimen>
-    <dimen name="button_close_message_top_margin">160dp</dimen>
-    <dimen name="button_close_message_padding">16dp</dimen>
     <dimen name="widget_product_image_size">65dp</dimen>
 
     <!--

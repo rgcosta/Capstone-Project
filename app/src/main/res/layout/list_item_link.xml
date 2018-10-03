@@ -107,7 +107,6 @@
         android:contentDescription="@string/contDescription_icon_cash_made" />
 
     <TextView
-        android:id="@+id/tv_currency_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/currency"
