@@ -55,10 +55,6 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onDataSetChanged() {
         this.mLinks = LinksWidgetService.getLinks();
-        if (mLinks == null)
-            Log.e(LOG_TAG, "onDataSetChanged: null");
-        else
-            Log.e(LOG_TAG, "onDataSetChanged: " + mLinks.size());
     }
 
     @Override
@@ -100,7 +96,6 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
 
         return views;
     }

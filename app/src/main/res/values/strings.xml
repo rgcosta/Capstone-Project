@@ -46,4 +46,10 @@
     <string name="add_widget">Add widget</string>
     <string name="channel_name">Widget</string>
     <string name="widget_description">Retrieves links from the server.</string>
+    <string name="fab_facebook_soon">Facebook share will be implemented soon.</string>
+    <string name="fab_instagram_soon">Instagram share will be implemented soon.</string>
+    <string name="fab_twitter_soon">Twitter share will be implemented soon.</string>
+    <string name="contDescription_fab_share">Share</string>
+    <string name="contDescription_icon_cash_made">How much money you made icon</string>
+    <string name="contDescription_icon_buyCounts">Icon indicates how many times the product was bought throgh your link.</string>
 </resources>

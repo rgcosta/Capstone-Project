@@ -41,11 +41,13 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import br.com.sociallinks.sociallinks.models.Link;
 import br.com.sociallinks.sociallinks.models.Product;
 import br.com.sociallinks.sociallinks.utils.FirebasePersistance;
+import br.com.sociallinks.sociallinks.utils.NetworkUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.design.widget.Snackbar.LENGTH_LONG;
 import static br.com.sociallinks.sociallinks.ProductDetailActivity.QUERY_KEY;
+import static br.com.sociallinks.sociallinks.utils.NetworkUtils.*;
 
 public class ProductSharedActivity extends AppCompatActivity {
 
@@ -94,8 +96,8 @@ public class ProductSharedActivity extends AppCompatActivity {
                 if (mProduct == null) {
                     return;
                 }
-                DatabaseReference dbRefBuyCounts = mDatabase.getReference( "shares");
-                dbRefBuyCounts.child(mUserIdSharedLink).child("links").child(String.valueOf(mProduct.getId()))
+                DatabaseReference dbRefBuyCounts = mDatabase.getReference(SHARES_PATH);
+                dbRefBuyCounts.child(mUserIdSharedLink).child(LINKS_PATH).child(String.valueOf(mProduct.getId()))
                         .runTransaction(new Transaction.Handler() {
                     @NonNull
                     @Override
@@ -145,7 +147,7 @@ public class ProductSharedActivity extends AppCompatActivity {
                             Log.e(LOG_TAG, "Link captured: " + deepLink.toString() + " - " + mUserIdSharedLink);
 
                             DatabaseReference dbRefProductId =
-                                    mDatabase.getReference("products/" + productId);
+                                    mDatabase.getReference(PRODUCTS_PATH + "/" + productId);
 
                             dbRefProductId.addValueEventListener(getProductListener());
 

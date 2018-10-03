@@ -40,11 +40,13 @@ import java.util.List;
 import br.com.sociallinks.sociallinks.R;
 import br.com.sociallinks.sociallinks.adapters.LinksAdapter;
 import br.com.sociallinks.sociallinks.models.Link;
+import br.com.sociallinks.sociallinks.utils.NetworkUtils;
 import br.com.sociallinks.sociallinks.utils.RecyclerLinkTouchHelper;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.support.design.widget.Snackbar.LENGTH_LONG;
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
+import static br.com.sociallinks.sociallinks.utils.NetworkUtils.*;
 
 
 public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClickHandler,
@@ -115,8 +117,8 @@ public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClick
             return;
         }
 
-        mDbRefLinks = database.getReference("shares").child(user.getUid())
-                .child("links");
+        mDbRefLinks = database.getReference(SHARES_PATH).child(user.getUid())
+                .child(LINKS_PATH);
         mLinksListener = mDbRefLinks.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -1,4 +1,5 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
@@ -58,7 +59,7 @@
                 android:paddingStart="@dimen/comp_card_sec_padding"
                 android:paddingBottom="@dimen/comp_card_padding"
                 android:paddingEnd="@dimen/margin_cards"
-                android:src="@drawable/ic_commission_24"
+                app:srcCompat="@drawable/ic_commission_24"
                 android:contentDescription="@string/contDescription_price_icon"/>
 
             <TextView

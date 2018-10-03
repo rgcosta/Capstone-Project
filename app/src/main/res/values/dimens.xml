@@ -29,4 +29,34 @@ Refer to App Widget Documentation for margin information
 http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="appBarLayout_height">320dp</dimen>
+    <dimen name="toolbar_margin_bottom">40dp</dimen>
+    <dimen name="title_linearLayout_height">80dp</dimen>
+    <dimen name="title_linearLayout_padding_start">16dp</dimen>
+    <dimen name="title_linearLayout_padding_top">50dp</dimen>
+    <dimen name="title_linearLayout_elevation">4dp</dimen>
+    <dimen name="commission_icon_margin_start">32dp</dimen>
+    <dimen name="commission_icon_margin_end">4dp</dimen>
+    <dimen name="product_description_margin">16dp</dimen>
+    <dimen name="fab_animation_rotate_angle">90</dimen>
+    <dimen name="widget_listview_margin">8dp</dimen>
+    <dimen name="product_image_size">65dp</dimen>
+    <dimen name="product_image_margin_bottom">16dp</dimen>
+    <dimen name="product_image_margin_start">16dp</dimen>
+    <dimen name="product_image_margin_top">16dp</dimen>
+    <dimen name="product_title_margin_start">8dp</dimen>
+    <dimen name="product_title_margin_top">4dp</dimen>
+    <dimen name="product_title_max_width">220dp</dimen>
+    <dimen name="product_link_margin_bottom">4dp</dimen>
+    <dimen name="product_link_margin_top">8dp</dimen>
+    <dimen name="icon_buyCounts_margin_end">16dp</dimen>
+    <dimen name="currency_text_size">8sp</dimen>
+    <dimen name="widget_width_size">200dp</dimen>
+    <dimen name="widget_product_image_margin">16dp</dimen>
+    <dimen name="widget_colum_buyCounts_margin_top">16dp</dimen>
+    <dimen name="widget_icon_buyCounts_margin_top">8dp</dimen>
+    <dimen name="widget_label_buyCounts_margin_top">8dp</dimen>
+    <dimen name="widget_column_cash_made_margin">16dp</dimen>
+    <dimen name="widget_image_divider_height">2dp</dimen>
+    <dimen name="widget_height_size">40dp</dimen>
 </resources>

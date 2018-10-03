@@ -16,6 +16,11 @@ public class NetworkUtils {
 
     public final static String TOP_PRODUCTS_PATH = "topTrends/products.json";
 
+    public static final String SHARES_PATH = "shares";
+    public static final String LINKS_PATH = "links";
+    public static final String PRODUCTS_PATH = "products";
+    public static final String USERNAME_FIELD = "userName";
+
     private final Retrofit retrofit;
 
     public NetworkUtils() {

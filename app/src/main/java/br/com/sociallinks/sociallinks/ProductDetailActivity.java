@@ -58,11 +58,13 @@ import br.com.sociallinks.sociallinks.fragments.ProductsFragment;
 import br.com.sociallinks.sociallinks.models.Link;
 import br.com.sociallinks.sociallinks.models.Product;
 import br.com.sociallinks.sociallinks.utils.NetworkStateReceiver;
+import br.com.sociallinks.sociallinks.utils.NetworkUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.support.design.widget.Snackbar.LENGTH_LONG;
 import static br.com.sociallinks.sociallinks.fragments.ProductsFragment.INTENT_PRODUCT_FLAG;
+import static br.com.sociallinks.sociallinks.utils.NetworkUtils.*;
 
 public class ProductDetailActivity extends AppCompatActivity implements NetworkStateReceiver.NetworkStateReceiverListener {
 
@@ -70,6 +72,16 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkS
     private static final String BASE_URL = "https://www.sociallinks.com";
     public static final String QUERY_KEY = "product";
     private static final String DYNAMIC_LINK_DOMAIN = "sociallinks.page.link";
+
+    //iOS test
+    private static final String IOS_ADDRESS = "com.sociallinks.ios";
+    private static final String APP_STORE_ID = "123456789";
+
+    //Google Analytic test
+    private static final String APP_SOURCE = "app";
+    private static final String SOCIAL_MEDIUM = "social";
+    private static final String EXAMPLE_CAMPAIGN = "example-promo";
+
 
     @BindView(R.id.tv_product_price_detailScreen) TextView mProductPrice;
     @BindView(R.id.tv_product_commission_detailScreen) TextView mProductCommission;
@@ -134,12 +146,12 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkS
                                             mProduct.getName(), mProduct.getPrice(), mProduct.getPhotoUrl(),
                                             mProduct.getCommission());
 
-                                    DatabaseReference dbRefShares = mDatabase.getReference("shares");
-                                    DatabaseReference dbRefProducts = mDatabase.getReference("products");
+                                    DatabaseReference dbRefShares = mDatabase.getReference(SHARES_PATH);
+                                    DatabaseReference dbRefProducts = mDatabase.getReference(PRODUCTS_PATH);
 
-                                    dbRefShares.child(mUser.getUid()).child("userName")
+                                    dbRefShares.child(mUser.getUid()).child(USERNAME_FIELD)
                                             .setValue(mUser.getDisplayName());
-                                    dbRefShares.child(mUser.getUid()).child("links").child(String.valueOf(mProduct.getId()))
+                                    dbRefShares.child(mUser.getUid()).child(LINKS_PATH).child(String.valueOf(mProduct.getId()))
                                             .setValue(link);
                                     dbRefProducts.child(String.valueOf(mProduct.getId()))
                                             .setValue(mProduct);
@@ -159,13 +171,13 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkS
                         return false;
 
                     case R.id.fab_facebook:
-                        Toast.makeText(ProductDetailActivity.this, "Facebook share will be implemented soon.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailActivity.this, getString(R.string.fab_facebook_soon), Toast.LENGTH_SHORT).show();
                         return false;
                     case R.id.fab_instagram:
-                        Toast.makeText(ProductDetailActivity.this, "Instagram share will be implemented soon.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailActivity.this, getString(R.string.fab_instagram_soon), Toast.LENGTH_SHORT).show();
                         return false;
                     case R.id.fab_twitter:
-                        Toast.makeText(ProductDetailActivity.this, "Twitter share will be implemented soon.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailActivity.this, getString(R.string.fab_twitter_soon), Toast.LENGTH_SHORT).show();
                         return false;
                     default:
                         return false;
@@ -189,16 +201,16 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkS
                                 .build())
                 .setIosParameters(
                         //for test purposes
-                        new DynamicLink.IosParameters.Builder("com.sociallinks.ios")
-                                .setAppStoreId("123456789")
-                                .setFallbackUrl(Uri.parse("https://www.placenpepper.com"))
-                                .setIpadFallbackUrl(Uri.parse("https://www.placenpepper.com"))
+                        new DynamicLink.IosParameters.Builder(IOS_ADDRESS)
+                                .setAppStoreId(APP_STORE_ID)
+                                .setFallbackUrl(Uri.parse(BASE_URL))
+                                .setIpadFallbackUrl(Uri.parse(BASE_URL))
                                 .build())
                 .setGoogleAnalyticsParameters(
                         new DynamicLink.GoogleAnalyticsParameters.Builder()
-                                .setSource("app")
-                                .setMedium("social")
-                                .setCampaign("example-promo")
+                                .setSource(APP_SOURCE)
+                                .setMedium(SOCIAL_MEDIUM)
+                                .setCampaign(EXAMPLE_CAMPAIGN)
                                 .build())
                 .setSocialMetaTagParameters(
                         new DynamicLink.SocialMetaTagParameters.Builder()

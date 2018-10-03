@@ -21,7 +21,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="@dimen/appBarLayout_height"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -31,7 +31,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:expandedTitleMargin="@dimen/activity_horizontal_margin"
-            app:expandedTitleMarginBottom="40dp"
+            app:expandedTitleMarginBottom="@dimen/toolbar_margin_bottom"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
             app:layout_scrollFlags="scroll"
             app:toolbarId="@+id/toolbar">
@@ -57,11 +57,11 @@
                 <LinearLayout
                     android:id="@+id/meta_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="@dimen/title_linearLayout_height"
                     android:layout_gravity="bottom"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="50dp"
-                    android:elevation="4dp"
+                    android:paddingStart="@dimen/title_linearLayout_padding_start"
+                    android:paddingTop="@dimen/title_linearLayout_padding_top"
+                    android:elevation="@dimen/title_linearLayout_elevation"
                     android:orientation="horizontal">
 
                     <TextView
@@ -82,9 +82,9 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="32dp"
-                        android:layout_marginRight="4dp"
-                        android:src="@drawable/ic_commission_24"
+                        android:layout_marginStart="@dimen/commission_icon_margin_start"
+                        android:layout_marginEnd="@dimen/commission_icon_margin_end"
+                        app:srcCompat="@drawable/ic_commission_24"
                         android:contentDescription="@string/contDescription_price_icon"/>
 
                     <TextView
@@ -136,13 +136,10 @@
                 style="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_margin="@dimen/product_description_margin"
                 android:autoLink="web"
                 android:linksClickable="true"
-                android:paddingTop="16dp"
+                android:paddingTop="@dimen/product_description_margin"
                 android:textColor="@color/colorPrimaryText" />
 
         </LinearLayout>
@@ -161,10 +158,10 @@
         android:clickable="true"
         android:focusable="true"
         android:layout_gravity="end|bottom"
-        android:contentDescription="Share"
+        android:contentDescription="@string/contDescription_fab_share"
         app:sdMainFabClosedSrc="@drawable/ic_menu_send"
         app:sdMainFabOpenedSrc="@drawable/ic_close_white_24"
-        app:sdMainFabAnimationRotateAngle="90"
+        app:sdMainFabAnimationRotateAngle="@dimen/fab_animation_rotate_angle"
         app:sdExpansionMode="top"
         app:sdOverlayLayout="@id/overlay" />
 

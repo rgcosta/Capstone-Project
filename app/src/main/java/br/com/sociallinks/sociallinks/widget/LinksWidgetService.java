@@ -28,6 +28,9 @@ import java.util.List;
 
 import br.com.sociallinks.sociallinks.R;
 import br.com.sociallinks.sociallinks.models.Link;
+import br.com.sociallinks.sociallinks.utils.NetworkUtils;
+
+import static br.com.sociallinks.sociallinks.utils.NetworkUtils.*;
 
 public class LinksWidgetService extends IntentService {
 
@@ -94,8 +97,8 @@ public class LinksWidgetService extends IntentService {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        mDbRefLinks = database.getReference("shares").child(user.getUid())
-                .child("links");
+        mDbRefLinks = database.getReference(SHARES_PATH).child(user.getUid())
+                .child(LINKS_PATH);
         mLinksListener = mDbRefLinks.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

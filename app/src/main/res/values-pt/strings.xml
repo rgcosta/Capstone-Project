@@ -27,4 +27,10 @@
     <string name="button_close_message">Fechar essa mensagem</string>
     <string name="future_feature_message">Função será implementada em breve.</string>
     <string name="widget_description">Recupera links do servidor.</string>
+    <string name="fab_facebook_soon">Compartilhamento do Facebook será implementado em breve.</string>
+    <string name="fab_instagram_soon">Compartilhamento do Instagram será implementado em breve.</string>
+    <string name="fab_twitter_soon">Compartilhamento do Twitter será implementado em breve.</string>
+    <string name="contDescription_fab_share">Compartilhar</string>
+    <string name="contDescription_icon_cash_made">Icone de quanto dinheiro a receber.</string>
+    <string name="contDescription_icon_buyCounts">Icone indica quantas vezes o produto foi comprado através do seu link.</string>
 </resources>

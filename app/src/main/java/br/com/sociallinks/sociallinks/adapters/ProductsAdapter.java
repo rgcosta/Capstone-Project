@@ -29,9 +29,9 @@ import br.com.sociallinks.sociallinks.models.Product;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ProductViewHolder> {
 
-    List<Product> mProducts = new ArrayList<>();
+    private List<Product> mProducts = new ArrayList<>();
 
-    ProductsOnClickHandler mClickHandler;
+    private ProductsOnClickHandler mClickHandler;
 
     public interface ProductsOnClickHandler {
         void onClick(Product product);

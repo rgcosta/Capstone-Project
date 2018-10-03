@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/list_view_widget"
-        android:layout_margin="5dp">
+        android:layout_margin="@dimen/widget_listview_margin">
 
     </ListView>
 

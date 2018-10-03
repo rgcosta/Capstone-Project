@@ -45,11 +45,11 @@
 
     <ImageView
         android:id="@+id/iv_product_mini_linkScreen"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="@dimen/product_image_size"
+        android:layout_height="@dimen/product_image_size"
+        android:layout_marginBottom="@dimen/product_image_margin_bottom"
+        android:layout_marginStart="@dimen/product_image_margin_start"
+        android:layout_marginTop="@dimen/product_image_margin_top"
         android:contentDescription="@string/contDescription_product_image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,11 +61,11 @@
         style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="@dimen/product_title_margin_start"
+        android:layout_marginTop="@dimen/product_title_margin_top"
         android:ellipsize="end"
         android:maxLines="1"
-        android:maxWidth="220dp"
+        android:maxWidth="@dimen/product_title_max_width"
         android:textColor="@color/colorPrimaryText"
         app:layout_constraintStart_toEndOf="@id/iv_product_mini_linkScreen"
         app:layout_constraintTop_toTopOf="@id/iv_product_mini_linkScreen"
@@ -76,8 +76,8 @@
         style="@style/TextAppearance.AppCompat.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/product_link_margin_bottom"
+        android:layout_marginTop="@dimen/product_link_margin_top"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/colorSecondaryText"
@@ -90,26 +90,28 @@
         android:id="@+id/iv_icon_buyCounts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/icon_buyCounts_margin_end"
         app:layout_constraintEnd_toStartOf="@id/iv_icon_cash_made"
         app:layout_constraintTop_toTopOf="@id/tv_product_title_linkScreen"
-        app:srcCompat="@drawable/ic_shopping_cart_black_24" />
+        app:srcCompat="@drawable/ic_shopping_cart_black_24"
+        android:contentDescription="@string/contDescription_icon_buyCounts" />
 
     <ImageView
         android:id="@+id/iv_icon_cash_made"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/icon_buyCounts_margin_end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iv_icon_buyCounts"
-        app:srcCompat="@drawable/ic_money_black_24" />
+        app:srcCompat="@drawable/ic_money_black_24"
+        android:contentDescription="@string/contDescription_icon_cash_made" />
 
     <TextView
         android:id="@+id/tv_currency_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/currency"
-        android:textSize="8sp"
+        android:textSize="@dimen/currency_text_size"
         app:layout_constraintBottom_toBottomOf="@+id/tv_cash"
         app:layout_constraintEnd_toStartOf="@id/tv_cash" />
 
