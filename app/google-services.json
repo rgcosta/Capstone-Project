@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "640732828458-hpts1utvac8u3osar369l25uh91lfhqo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.sociallinks.sociallinks",
+            "certificate_hash": "5e0d4c5944df4cfe6a3a37c8e58944833622b308"
+          }
+        },
+        {
           "client_id": "640732828458-nhngqg4qnkp8c9nkn4lerabcim1vo8m6.apps.googleusercontent.com",
           "client_type": 3
         }

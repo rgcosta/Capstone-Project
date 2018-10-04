@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements NetworkStateRecei
         mNetworkStateReceiver.addListener(this);
         this.registerReceiver(mNetworkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
 
+        printKeyHash();
+
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
             // already signed in
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NetworkStateRecei
             loginFlow();
         }
 
-        printKeyHash();
+
     }
 
     private void loginFlow() {
