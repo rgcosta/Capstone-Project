@@ -33,7 +33,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
     private ProductsOnClickHandler mClickHandler;
 
     public interface ProductsOnClickHandler {
-        void onClick(Product product);
+        void onClick(View itemView, Product product);
     }
 
     public ProductsAdapter(ProductsOnClickHandler onClickHandler){
@@ -55,7 +55,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ProductViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ProductViewHolder holder, final int position) {
 
         holder.mProductNameTextView.setText(mProducts.get(position).getName());
         holder.mProductPrice.setText("" + mProducts.get(position).getPrice());
@@ -72,10 +72,15 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         Bitmap bitmap = ((BitmapDrawable) resource.getCurrent()).getBitmap();
-                        Palette palette = Palette.from(bitmap).generate();
-                        int defaultColor = 0xFF333333;
-                        int color = palette.getMutedColor( defaultColor);
-                        holder.itemView.setBackgroundColor(color);
+                        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(@NonNull Palette palette) {
+                                int defaultColor = 0xFF333333;
+                                int mutedColor = palette.getMutedColor(defaultColor);
+                                holder.itemView.setBackgroundColor(mutedColor);
+
+                            }
+                        });
                         return false;
                     }
                 })
@@ -115,7 +120,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.Produc
         public void onClick(View view) {
             int position = getAdapterPosition();
             Product productClicked = mProducts.get(position);
-            mClickHandler.onClick(productClicked);
+            mClickHandler.onClick(view, productClicked);
         }
     }
 }

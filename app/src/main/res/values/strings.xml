@@ -46,4 +46,5 @@
     <string name="contDescription_fab_share">Share</string>
     <string name="contDescription_icon_cash_made">How much money you made icon</string>
     <string name="contDescription_icon_buyCounts">Icon indicates how many times the product was bought throgh your link.</string>
+    <string name="product_shared_element_transition" translatable="false">product_shared_element_transition</string>
 </resources>

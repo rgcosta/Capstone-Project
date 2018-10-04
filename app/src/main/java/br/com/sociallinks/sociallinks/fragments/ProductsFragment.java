@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -123,10 +124,24 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
     }
 
     @Override
-    public void onClick(Product product) {
+    public void onClick(View itemView, Product product) {
+
+        final View productImageView = itemView.findViewById(R.id.iv_product_image);
+
         Intent intent = new Intent(getContext(), ProductDetailActivity.class);
         intent.putExtra(INTENT_PRODUCT_FLAG, product);
-        startActivity(intent);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ActivityOptionsCompat options = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(
+                            getActivity(),
+                            productImageView,
+                            getString(R.string.product_shared_element_transition)
+                    );
+            startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override

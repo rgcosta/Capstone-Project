@@ -38,6 +38,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:transitionName="@string/product_shared_element_transition"
                 android:fitsSystemWindows="true">
 
                 <ImageView

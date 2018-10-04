@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:transitionName="@string/product_shared_element_transition"
         android:orientation="vertical">
 
         <ImageView

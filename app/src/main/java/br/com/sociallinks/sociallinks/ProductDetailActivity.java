@@ -8,12 +8,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -49,7 +49,10 @@ import butterknife.ButterKnife;
 
 import static android.support.design.widget.Snackbar.LENGTH_LONG;
 import static br.com.sociallinks.sociallinks.fragments.ProductsFragment.INTENT_PRODUCT_FLAG;
-import static br.com.sociallinks.sociallinks.utils.NetworkUtils.*;
+import static br.com.sociallinks.sociallinks.utils.NetworkUtils.LINKS_PATH;
+import static br.com.sociallinks.sociallinks.utils.NetworkUtils.PRODUCTS_PATH;
+import static br.com.sociallinks.sociallinks.utils.NetworkUtils.SHARES_PATH;
+import static br.com.sociallinks.sociallinks.utils.NetworkUtils.USERNAME_FIELD;
 
 public class ProductDetailActivity extends AppCompatActivity implements NetworkStateReceiver.NetworkStateReceiverListener {
 
@@ -217,7 +220,7 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkS
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                supportFinishAfterTransition();
             }
         });
 
@@ -237,7 +240,19 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkS
                         @Override
                         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                             Bitmap bitmap = ((BitmapDrawable) resource.getCurrent()).getBitmap();
-                            changeUIColors(bitmap);
+                            Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+                                @Override
+                                public void onGenerated(@NonNull Palette palette) {
+                                    int defaultColor = 0xFF333333;
+                                    int mutedColor = palette.getMutedColor(defaultColor);
+                                    mMetaBar.setBackgroundColor(mutedColor);
+                                    if (mCollapsingToolbar != null){
+                                        mCollapsingToolbar.setContentScrimColor(mutedColor);
+                                        mCollapsingToolbar.setStatusBarScrimColor(mutedColor);
+                                    }
+
+                                }
+                            });
                             return false;
                         }
                     })
@@ -266,21 +281,6 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkS
                 .setFabBackgroundColor(getResources().getColor(R.color.twiterLogo))
                 .create()
         );
-    }
-
-    private void changeUIColors(Bitmap bitmap) {
-        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-            @Override
-            public void onGenerated(@NonNull Palette palette) {
-                int defaultColor = 0xFF333333;
-                int darkMutedColor = palette.getDarkMutedColor(defaultColor);
-                mMetaBar.setBackgroundColor(darkMutedColor);
-                if (mCollapsingToolbar != null){
-                    mCollapsingToolbar.setContentScrimColor(darkMutedColor);
-                    mCollapsingToolbar.setStatusBarScrimColor(darkMutedColor);
-                }
-            }
-        });
     }
 
     @Override
