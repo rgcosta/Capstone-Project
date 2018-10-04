@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutionException;
 
 import br.com.sociallinks.sociallinks.R;
 import br.com.sociallinks.sociallinks.models.Link;
+import br.com.sociallinks.sociallinks.services.LinksWidgetService;
 
 public class ListWidgetService extends RemoteViewsService {
     @Override

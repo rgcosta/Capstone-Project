@@ -97,7 +97,6 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkS
         Intent intent = getIntent();
         if (intent.hasExtra(INTENT_PRODUCT_FLAG)) {
             mProduct = intent.getParcelableExtra(INTENT_PRODUCT_FLAG);
-            Log.e(LOG_TAG, "INTENT_PRODUCT_FLAG:exists1");
         }
 
         mNetworkStateReceiver = new NetworkStateReceiver();

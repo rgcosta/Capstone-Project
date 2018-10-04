@@ -10,6 +10,7 @@ import android.widget.RemoteViews;
 
 import br.com.sociallinks.sociallinks.ProductsActivity;
 import br.com.sociallinks.sociallinks.R;
+import br.com.sociallinks.sociallinks.services.LinksWidgetService;
 
 /**
  * Implementation of App Widget functionality.

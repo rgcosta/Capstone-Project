@@ -68,11 +68,13 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/links_widget_provider_info" />
         </receiver>
-        <service android:name=".widget.LinksWidgetService"
+        <service android:name=".services.LinksWidgetService"
             android:permission="android.permission.FOREGROUND_SERVICE"/>
 
         <service android:name=".widget.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+        <service android:name=".services.ProductsService"/>
     </application>
 
 </manifest>

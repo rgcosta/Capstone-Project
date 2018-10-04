@@ -1,4 +1,4 @@
-package br.com.sociallinks.sociallinks.widget;
+package br.com.sociallinks.sociallinks.services;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -27,6 +27,7 @@ import java.util.List;
 
 import br.com.sociallinks.sociallinks.R;
 import br.com.sociallinks.sociallinks.models.Link;
+import br.com.sociallinks.sociallinks.widget.LinksWidgetProvider;
 
 import static br.com.sociallinks.sociallinks.utils.NetworkUtils.*;
 

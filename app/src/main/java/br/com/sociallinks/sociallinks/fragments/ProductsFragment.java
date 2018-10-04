@@ -1,13 +1,17 @@
 package br.com.sociallinks.sociallinks.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -22,10 +26,9 @@ import br.com.sociallinks.sociallinks.ProductDetailActivity;
 import br.com.sociallinks.sociallinks.R;
 import br.com.sociallinks.sociallinks.adapters.ProductsAdapter;
 import br.com.sociallinks.sociallinks.models.Product;
-import br.com.sociallinks.sociallinks.utils.NetworkUtils;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import br.com.sociallinks.sociallinks.services.ProductsService;
+
+import static br.com.sociallinks.sociallinks.services.ProductsService.*;
 
 public class ProductsFragment extends Fragment implements ProductsAdapter.ProductsOnClickHandler, Parcelable{
 
@@ -34,6 +37,7 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
     public static final String INTENT_PRODUCT_FLAG = "intent_product_flag";
 
     private ProductsAdapter mProductsAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private List<Product> mProducts = new ArrayList<>();
 
     public ProductsFragment() {
@@ -66,6 +70,14 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
 
         initializeRecyclerView(view);
 
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ProductsService.startActionRetrieveProducts(getActivity());
+            }
+        });
+
         if (savedInstanceState != null) {
             if (savedInstanceState.containsKey(LIST_PRODUCTS_KEY)) {
                 mProducts = savedInstanceState.getParcelableArrayList(LIST_PRODUCTS_KEY);
@@ -73,13 +85,40 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
         }
 
         if (mProducts.isEmpty() || mProducts == null) {
-            callToProducts();
+            ProductsService.startActionRetrieveProducts(getActivity());
         } else {
             Log.e(LOG_TAG, "Reuses existing products. Saving data!!");
             mProductsAdapter.setProductsData(mProducts);
         }
 
         return view;
+    }
+
+    private BroadcastReceiver mReceiverRefreshed = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BROADCAST_ACTION_PRODUCTS_RETRIEVED.equals(action)) {
+                mProducts = intent.getParcelableArrayListExtra(INTENT_EXTRA_PRODUCTS_FLAG);
+                mProductsAdapter.setProductsData(mProducts);
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().registerReceiver(
+                mReceiverRefreshed,
+                new IntentFilter(BROADCAST_ACTION_PRODUCTS_RETRIEVED)
+        );
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unregisterReceiver(mReceiverRefreshed);
     }
 
     private void initializeRecyclerView(View view) {
@@ -95,25 +134,6 @@ public class ProductsFragment extends Fragment implements ProductsAdapter.Produc
         productsRecyclerView.setAdapter(mProductsAdapter);
     }
 
-    private void callToProducts() {
-        Call<List<Product>> call = new NetworkUtils().getProductsApiService().getProducts();
-        call.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                Log.e(LOG_TAG, "Products size: " + response.body().size());
-
-                if (response.isSuccessful()) {
-                    mProducts = response.body();
-                    mProductsAdapter.setProductsData(mProducts);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.e(LOG_TAG, t.getMessage());
-            }
-        });
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
