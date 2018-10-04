@@ -3,8 +3,6 @@ package br.com.sociallinks.sociallinks.fragments;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.graphics.Canvas;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -18,13 +16,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.data.DataRewinder;
-import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,14 +28,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.sociallinks.sociallinks.R;
 import br.com.sociallinks.sociallinks.adapters.LinksAdapter;
 import br.com.sociallinks.sociallinks.models.Link;
-import br.com.sociallinks.sociallinks.utils.NetworkUtils;
 import br.com.sociallinks.sociallinks.utils.RecyclerLinkTouchHelper;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -189,7 +182,6 @@ public class LinksFragment extends Fragment implements LinksAdapter.LinksOnClick
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         Log.e(LOG_TAG, "Link " + position + " deleted!");
-        //mLinksAdapter.remoteLinkItem(position);
         final Link linkSwiped = mLinksAdapter.getLinkByPosition(position);
         final int productId = linkSwiped.getProductId();
 

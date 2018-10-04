@@ -83,30 +83,6 @@ public class Link implements Parcelable {
         this.buyCounts = buyCounts;
     }
 
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public void setCommission(int commission) {
-        this.commission = commission;
-    }
-
-    public void setProductPrice(double productPrice) {
-        this.productPrice = productPrice;
-    }
-
-    public void setProductPhotoUrl(String productPhotoUrl) {
-        this.productPhotoUrl = productPhotoUrl;
-    }
-
     @Override
     public int describeContents() {
         return 0;

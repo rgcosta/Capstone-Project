@@ -86,50 +86,6 @@ public class Product implements Parcelable {
         }
     };
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setShortDesc(String shortDesc) {
-        this.shortDesc = shortDesc;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setCommission(int commission) {
-        this.commission = commission;
-    }
-
-    public void setQtd(int qtd) {
-        this.qtd = qtd;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
-
-    public void setSeller(String seller) {
-        this.seller = seller;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
     public int getId() {
         return id;
     }
@@ -142,10 +98,6 @@ public class Product implements Parcelable {
         return description;
     }
 
-    public String getShortDesc() {
-        return shortDesc;
-    }
-
     public String getPhotoUrl() {
         return photoUrl;
     }
@@ -156,22 +108,6 @@ public class Product implements Parcelable {
 
     public int getCommission() {
         return commission;
-    }
-
-    public int getQtd() {
-        return qtd;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public String getSeller() {
-        return seller;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package br.com.sociallinks.sociallinks.utils;
 
 import android.app.Application;
-import android.content.ComponentCallbacks;
 import android.util.Log;
 
 import com.google.firebase.database.FirebaseDatabase;

@@ -1,10 +1,6 @@
 package br.com.sociallinks.sociallinks.utils;
 
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
 import br.com.sociallinks.sociallinks.api.ProductsApiService;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;

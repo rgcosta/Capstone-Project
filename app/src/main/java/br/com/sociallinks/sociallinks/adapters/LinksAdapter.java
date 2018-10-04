@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LinksAdapter extends RecyclerView.Adapter<LinksAdapter.LinkViewHolder> {
-
-    private static final String LOG_TAG = LinksAdapter.class.getSimpleName();
 
     private List<Link> mLinks = new ArrayList<>();
 
@@ -82,11 +79,6 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksAdapter.LinkViewHold
     public void setLinksData(List<Link> mLinks) {
         this.mLinks = mLinks;
         notifyDataSetChanged();
-    }
-
-    public void remoteLinkItem(int position){
-        mLinks.remove(position);
-        notifyItemRemoved(position);
     }
 
     public Link getLinkByPosition(int position) {

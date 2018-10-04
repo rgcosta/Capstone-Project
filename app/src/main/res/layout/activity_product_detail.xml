@@ -33,8 +33,7 @@
             app:expandedTitleMargin="@dimen/activity_horizontal_margin"
             app:expandedTitleMarginBottom="@dimen/toolbar_margin_bottom"
             app:expandedTitleTextAppearance="@style/ExpandedTitleTextAppearance"
-            app:layout_scrollFlags="scroll"
-            app:toolbarId="@+id/toolbar">
+            app:layout_scrollFlags="scroll">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -47,7 +46,7 @@
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
-                    tools:ignore="ContentDescription" />
+                    android:contentDescription="@string/contDescription_product_image" />
 
                 <View
                     android:layout_width="match_parent"

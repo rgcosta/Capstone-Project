@@ -25,7 +25,6 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -40,8 +39,6 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import br.com.sociallinks.sociallinks.models.Link;
 import br.com.sociallinks.sociallinks.models.Product;
-import br.com.sociallinks.sociallinks.utils.FirebasePersistance;
-import br.com.sociallinks.sociallinks.utils.NetworkUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
